@@ -2,21 +2,43 @@ class App
 {
     // https://konvajs.org/docs/index.html
 
-    constructor(backgroundImage, containerId, sizeX, sizeY) {
+    constructor(backgroundImage, colorPicker, saveAndLoad, containerId) {
         this.backgroundImage = backgroundImage;
+        this.colorPicker = colorPicker;
+        this.saveAndLoad = saveAndLoad;
         this.containerId = containerId;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
         this.voxelMatrix = [];
         this.handlerMatrix = [];
+        this.built = false;
     }
 
-    run() {
+    setSize(sizeX, sizeY, virtualVoxelSize) {
+        this.prevSizeX = this.sizeX;
+        this.prevSizeY = this.sizeY;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.virtualVoxelSize = virtualVoxelSize ?? 84;
+    }
+
+    build() {
+        if (this.built) {
+            this.#clear();
+        }
+
+        this.#create();
+        this.built = true;
+    }
+
+    #clear() {
+        this.stage.destroy();
+    }
+
+    #create() {
         const container = document.getElementById(this.containerId);
         const containerWidth = container.offsetWidth;
         const containerHeight = container.offsetHeight;
-        const width = 1000;
-        const height = 1000;
+        const width = this.sizeX * this.virtualVoxelSize;
+        const height = this.sizeY * this.virtualVoxelSize;
 
         const voxelWidth = width / (this.sizeX + 2);
         const voxelHeight = height / (this.sizeY + 2);
@@ -29,12 +51,16 @@ class App
 
         this.stage = new Konva.Stage({
             container: this.containerId,
-            width: width,
-            height: height,
+            width: containerWidth,
+            height: containerHeight,
             offsetX: -this.voxelSize,
             offsetY: -this.voxelSize,
             scaleX: containerWidth / width,
             scaleY: containerHeight / height
+        });
+
+        this.stage.on('contextmenu', (e) => {
+            e.evt.preventDefault();
         });
 
         this.voxelLayer = new Konva.Layer();
@@ -43,12 +69,11 @@ class App
 
         this.#initialize();
         this.backgroundImage.initialize(this);
-
+        this.colorPicker.initialize(this);
 
         this.stage.add(this.imageLayer);
         this.stage.add(this.voxelLayer);
         this.stage.add(this.handlerLayer);
-
     }
 
     #initialize() {

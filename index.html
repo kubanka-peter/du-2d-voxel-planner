@@ -22,6 +22,9 @@
     <script src="voxel.js"></script>
     <script src="handler.js"></script>
     <script src="backgroundImage.js"></script>
+    <script src="colorPicker.js"></script>
+    <script src="sizeController.js"></script>
+    <script src="saveAndLoad.js"></script>
 </head>
 <body>
 
@@ -34,6 +37,30 @@
                 <p>
                     work in progress
                 </p>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="width">
+                                        Width
+                                    </label>
+                                    <input type="number" id="width" class="form-control" value="20" style="width: 100px;">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="height">
+                                        Height
+                                    </label>
+                                    <input type="number" id="height" class="form-control" value="20" style="width: 100px;">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group">
@@ -64,6 +91,11 @@
                             </label>
                             <input type="color" id="color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
                         </div>
+                        <p class="small" style="padding-top: 20px">
+                            <span class="badge bg-info">Left click: set</span>
+                            <span class="badge bg-info">Middle click: pick</span>
+                            <span class="badge bg-info">Right click: clear</span>
+                        </p>
                     </div>
                 </div>
 
@@ -77,13 +109,22 @@
             "lock-image",
             "hide-image"
         );
+
+        let colorPicker = new ColorPicker(
+            "color"
+        );
+
+        let saveAndLoad = new SaveAndLoad();
+
         let app = new App(
             bgImage,
-            "container",
-            20,
-            20
+            colorPicker,
+            saveAndLoad,
+            "container"
         );
-        app.run();
+
+        let sizeController = new SizeController("width", "height");
+        sizeController.initialize(app);
     </script>
 </body>
 </html>
