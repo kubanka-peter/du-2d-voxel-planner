@@ -25,6 +25,7 @@
     <script src="colorPicker.js"></script>
     <script src="sizeController.js"></script>
     <script src="saveAndLoad.js"></script>
+    <script src="zoom.js"></script>
 </head>
 <body>
 
@@ -37,6 +38,16 @@
                 <p>
                     work in progress
                 </p>
+                <div class="card">
+                    <div class="card-body">
+                        <p>
+                            <span class="badge bg-info">Mouse scroll: zoom</span>
+                            <span class="badge bg-info">Left click: set selected color</span>
+                            <span class="badge bg-info">Middle click: pick voxel color</span>
+                            <span class="badge bg-info">Right click: clear voxel</span>
+                        </p>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -91,11 +102,6 @@
                             </label>
                             <input type="color" id="color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
                         </div>
-                        <p class="small" style="padding-top: 20px">
-                            <span class="badge bg-info">Left click: set</span>
-                            <span class="badge bg-info">Middle click: pick</span>
-                            <span class="badge bg-info">Right click: clear</span>
-                        </p>
                     </div>
                 </div>
 
@@ -116,10 +122,13 @@
 
         let saveAndLoad = new SaveAndLoad();
 
+        let zoom = new Zoom();
+
         let app = new App(
             bgImage,
             colorPicker,
             saveAndLoad,
+            zoom,
             "container"
         );
 

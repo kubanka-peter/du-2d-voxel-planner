@@ -2,10 +2,11 @@ class App
 {
     // https://konvajs.org/docs/index.html
 
-    constructor(backgroundImage, colorPicker, saveAndLoad, containerId) {
+    constructor(backgroundImage, colorPicker, saveAndLoad, zoom, containerId) {
         this.backgroundImage = backgroundImage;
         this.colorPicker = colorPicker;
         this.saveAndLoad = saveAndLoad;
+        this.zoom = zoom;
         this.containerId = containerId;
         this.voxelMatrix = [];
         this.handlerMatrix = [];
@@ -70,6 +71,7 @@ class App
         this.#initialize();
         this.backgroundImage.initialize(this);
         this.colorPicker.initialize(this);
+        this.zoom.initialize(this);
 
         this.stage.add(this.imageLayer);
         this.stage.add(this.voxelLayer);
