@@ -37,20 +37,26 @@ class BackgroundImage
             const reader = new FileReader();
 
             reader.addEventListener("load", function () {
-                let imageTag = new Image();
-
-                imageTag.onload = function() {
-                    self.#updateBackgroundImage(imageTag);
-                };
-
-                imageTag.src = reader.result;
+                self.setImage(reader.result);
             })
 
             reader.readAsDataURL(files[0]);
         }
     }
 
-    #updateBackgroundImage(imageTag) {
+    setImage(imageBase64, attrs) {
+        let imageTag = new Image();
+        let self = this;
+
+        imageTag.onload = function() {
+            self.#updateBackgroundImage(imageTag, attrs);
+        };
+
+        imageTag.src = imageBase64;
+        this.imageBase64 = imageBase64;
+    }
+
+    #updateBackgroundImage(imageTag, attrs) {
         let imageWidth = this.app.sizeX * app.voxelSize / 2;
 
         let imageHeight = imageTag.height / imageTag.width * imageWidth;
@@ -64,11 +70,16 @@ class BackgroundImage
             id: "background"
         });
 
+        if (attrs) {
+            image.setAttrs(attrs);
+        }
+
         this.app.imageLayer.find("#background").forEach(function (item) {
             item.destroy();
         });
 
         this.app.imageLayer.add(image);
+        this.image = image;
 
         this.#updateImageState();
     }

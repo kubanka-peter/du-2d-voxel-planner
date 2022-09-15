@@ -2,15 +2,17 @@ class App
 {
     // https://konvajs.org/docs/index.html
 
-    constructor(backgroundImage, colorPicker, saveAndLoad, zoom, containerId) {
+    constructor(backgroundImage, colorPicker, saveAndLoad, sizeController, zoom, label, containerId) {
         this.backgroundImage = backgroundImage;
         this.colorPicker = colorPicker;
         this.saveAndLoad = saveAndLoad;
         this.zoom = zoom;
+        this.sizeController = sizeController;
         this.containerId = containerId;
         this.voxelMatrix = [];
         this.handlerMatrix = [];
         this.built = false;
+        this.label = label;
     }
 
     setSize(sizeX, sizeY, virtualVoxelSize) {
@@ -57,7 +59,8 @@ class App
             offsetX: -this.voxelSize,
             offsetY: -this.voxelSize,
             scaleX: containerWidth / width,
-            scaleY: containerHeight / height
+            scaleY: containerHeight / height,
+            draggable: true
         });
 
         this.stage.on('contextmenu', (e) => {
@@ -67,15 +70,19 @@ class App
         this.voxelLayer = new Konva.Layer();
         this.handlerLayer = new Konva.Layer();
         this.imageLayer = new Konva.Layer();
+        this.labelLayer = new Konva.Layer();
 
         this.#initialize();
         this.backgroundImage.initialize(this);
         this.colorPicker.initialize(this);
         this.zoom.initialize(this);
+        this.saveAndLoad.initialize(this);
+        this.label.initialize(this);
 
         this.stage.add(this.imageLayer);
         this.stage.add(this.voxelLayer);
         this.stage.add(this.handlerLayer);
+        this.stage.add(this.labelLayer);
     }
 
     #initialize() {
@@ -104,7 +111,7 @@ class App
                 if (this.handlerMatrix[x] === undefined) {
                     this.handlerMatrix[x] = [];
                 }
-                this.handlerMatrix[x] = handler;
+                this.handlerMatrix[x][y] = handler;
             }
         }
     }

@@ -7,7 +7,7 @@ class Zoom
      * @param app App
      */
     initialize(app) {
-        let scaleBy = 1.01;
+        let scaleBy = 1.03;
 
         app.stage.on('wheel', (e) => {
             // stop default scrolling

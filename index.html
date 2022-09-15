@@ -26,6 +26,7 @@
     <script src="sizeController.js"></script>
     <script src="saveAndLoad.js"></script>
     <script src="zoom.js"></script>
+    <script src="label.js"></script>
 </head>
 <body>
 
@@ -35,17 +36,16 @@
                 <div id="container" style="width: 800px; height: 800px; overflow: hidden"></div>
             </div>
             <div class="col">
-                <p>
-                    work in progress
-                </p>
                 <div class="card">
                     <div class="card-body">
                         <p>
+                            <span class="badge bg-info">Arrow keys: move label</span>
                             <span class="badge bg-info">Mouse scroll: zoom</span>
                             <span class="badge bg-info">Left click: set selected color</span>
                             <span class="badge bg-info">Middle click: pick voxel color</span>
                             <span class="badge bg-info">Right click: clear voxel</span>
                         </p>
+                        <p>Coming: configs to popup, fix grid aspect ratio if width != height, custom starting pos for label</p>
                     </div>
                 </div>
                 <div class="card">
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <p class="small" style="padding-top: 20px;">If you change this, the current content will be deleted.<br> It's not optimized, may or may not run in your browser with large grid size.</p>
                     </div>
                 </div>
 
@@ -96,12 +96,43 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label" for="color">
-                                Pick a color
-                            </label>
-                            <input type="color" id="color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="color">
+                                        voxel color
+                                    </label>
+                                    <input type="color" id="color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="grid-color">
+                                        grid color
+                                    </label>
+                                    <input type="color" id="grid-color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <button id="save" class="btn btn-primary">Save</button>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="file" id="loadFile" class="form-control" placeholder="Bacground Image" accept=".json">
+                                    <div class="input-group-append">
+                                        <button id="load" class="btn btn-primary">Load</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -117,22 +148,28 @@
         );
 
         let colorPicker = new ColorPicker(
-            "color"
+            "color",
+            "grid-color"
         );
 
-        let saveAndLoad = new SaveAndLoad();
+        let saveAndLoad = new SaveAndLoad("save", "loadFile", "load");
 
         let zoom = new Zoom();
+
+        let sizeController = new SizeController("width", "height");
+
+        let label = new Label();
 
         let app = new App(
             bgImage,
             colorPicker,
             saveAndLoad,
+            sizeController,
             zoom,
+            label,
             "container"
         );
 
-        let sizeController = new SizeController("width", "height");
         sizeController.initialize(app);
     </script>
 </body>

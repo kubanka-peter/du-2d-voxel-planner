@@ -30,6 +30,12 @@ class Voxel
         this.item.points(this.#getPoints());
     }
 
+    setColor(color)
+    {
+        this.item.fill(color);
+        this.color = color;
+    }
+
     #createPolyline() {
         let line = new Konva.Line({
             points: this.#getPoints(),

@@ -20,7 +20,7 @@ class Handler
         this.bottomRightVoxel = null;
         this.bottomLeftVoxel = null;
 
-        let center = this.#getOriginalPosition();
+        let center = this.getOriginalPosition();
         let maxOffsetDiff = 1.5 * app.voxelSize;
         this.minDragX = center[0] - maxOffsetDiff;
         this.maxDragX = center[0] + maxOffsetDiff;
@@ -28,14 +28,19 @@ class Handler
         this.maxDragY = center[1] + maxOffsetDiff;
     }
 
-    #getPosition() {
+    setOffset(offset) {
+        this.offset = offset;
+        this.#update();
+    }
+
+    getPosition() {
         return [
             app.voxelSize * this.x + this.offset[0],
             app.voxelSize * this.y + this.offset[1]
         ];
     }
 
-    #getOriginalPosition() {
+    getOriginalPosition() {
         return [
             app.voxelSize * this.x,
             app.voxelSize * this.y
@@ -44,7 +49,7 @@ class Handler
 
     #onDragEnd() {
         let currentPosition = this.item.getPosition();
-        let originalPosition = this.#getOriginalPosition();
+        let originalPosition = this.getOriginalPosition();
 
         let offsetX = currentPosition.x- originalPosition[0];
         let offsetY = currentPosition.y - originalPosition[1];
@@ -52,6 +57,10 @@ class Handler
         this.offset[0] = offsetX / app.voxelSize;
         this.offset[1] = offsetY / app.voxelSize;
 
+        this.#update();
+    }
+
+    #update () {
         if (this.topLeftVoxel) {
             this.topLeftVoxel.offset['BOTTOM_RIGHT'] = this.offset;
             this.topLeftVoxel.update();
@@ -71,6 +80,13 @@ class Handler
             this.bottomLeftVoxel.offset['TOP_RIGHT'] = this.offset;
             this.bottomLeftVoxel.update();
         }
+
+        let originalPos = this.getOriginalPosition();
+
+        this.item.position({
+            x: originalPos[0] + this.offset[0] * this.app.voxelSize,
+            y: originalPos[1] + this.offset[1] * this.app.voxelSize
+        })
     }
 
     #dragBound () {
@@ -95,7 +111,7 @@ class Handler
     }
 
     #createCircle() {
-        let position = this.#getPosition();
+        let position = this.getPosition();
         let self = this;
 
         let circle = new Konva.Circle({

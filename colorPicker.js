@@ -1,17 +1,24 @@
 class ColorPicker
 {
-    constructor(pickerId) {
+    constructor(pickerId, gridPickerId) {
         this.pickerId = pickerId;
+        this.gridPicker = document.getElementById(gridPickerId);
     }
 
     initialize(app) {
         this.app = app;
         let self = this;
 
-        this.color = this.#hexToRgbA(document.getElementById(this.pickerId).value, 1);
+        this.color = this.#hexToRgbA(document.getElementById(this.pickerId).value, 0.8);
+        this.gridColor = this.gridPicker.value;
 
         document.getElementById(this.pickerId).onchange = function (event) {
-            self.color = self.#hexToRgbA(event.target.value, 1);
+            self.color = self.#hexToRgbA(event.target.value, 0.8);
+        }
+
+        this.gridPicker.onchange = function () {
+            self.#updateGridColor();
+            self.gridColor = self.gridPicker.value;
         }
 
         for (let x = 0; x < app.sizeX; x++) {
@@ -38,17 +45,31 @@ class ColorPicker
         }
     }
 
+    #updateGridColor() {
+        for (let x = 0; x < this.app.sizeX; x++) {
+            for (let y = 0; y < this.app.sizeY; y++) {
+                this.app.voxelMatrix[x][y].item.stroke(this.gridPicker.value);
+            }
+        }
+
+        for (let x = 0; x < this.app.sizeX + 1; x++) {
+            for (let y = 0; y < this.app.sizeY + 1; y++) {
+                this.app.handlerMatrix[x][y].item.stroke(this.gridPicker.value);
+            }
+        }
+    }
+
     #getColor(voxel) {
         this.color = voxel.item.getAttr("fill");
         document.getElementById(this.pickerId).value = this.#RGBAToHex(this.color);
     }
 
     #clearColor(voxel) {
-        voxel.item.fill("rgba(255, 255, 255, 0)")
+        voxel.setColor("rgba(255, 255, 255, 0)");
     }
 
     #setColor(voxel) {
-        voxel.item.fill(this.color);
+        voxel.setColor(this.color)
     }
 
     #hexToRgbA(hex, alpha) {
