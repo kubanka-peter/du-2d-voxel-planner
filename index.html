@@ -133,6 +133,20 @@
                             </div>
                         </div>
 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="build-view">
+                            <label class="form-check-label" for="build-view">
+                                Build view
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="block-view" disabled>
+                            <label class="form-check-label" for="block-view">
+                                Show block placement
+                            </label>
+                        </div>
+
                     </div>
                 </div>
 
@@ -167,7 +181,9 @@
             sizeController,
             zoom,
             label,
-            "container"
+            "container",
+            "build-view",
+            "block-view"
         );
 
         sizeController.initialize(app);

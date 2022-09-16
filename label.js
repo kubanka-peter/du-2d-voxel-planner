@@ -47,22 +47,24 @@ class Label {
 
         let self = this;
 
-        container.addEventListener('keydown', function (e) {
-            console.log("x");
-            if (e.keyCode === 37) {
-                self.x--;
-            } else if (e.keyCode === 38) {
-                self.y--;
-            } else if (e.keyCode === 39) {
-                self.x++;
-            } else if (e.keyCode === 40) {
-                self.y++;
-            } else {
-                return;
-            }
-            e.preventDefault();
-            self.#update();
-        });
+        if (!container.keyDownEventAdded) {
+            container.keyDownEventAdded = true;
+            container.addEventListener('keydown', function (e) {
+                if (e.keyCode === 37) {
+                    self.x--;
+                } else if (e.keyCode === 38) {
+                    self.y--;
+                } else if (e.keyCode === 39) {
+                    self.x++;
+                } else if (e.keyCode === 40) {
+                    self.y++;
+                } else {
+                    return;
+                }
+                e.preventDefault();
+                self.#update();
+            });
+        }
     }
 
     #update() {

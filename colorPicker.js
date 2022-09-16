@@ -6,6 +6,10 @@ class ColorPicker
     }
 
     initialize(app) {
+        if (app.buildView) {
+            return;
+        }
+
         this.app = app;
         let self = this;
 
