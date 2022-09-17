@@ -109,6 +109,6 @@ class Label {
         this.tooltip.x(this.app.handlerMatrix[x][y].getOriginalPosition()[0] + this.app.voxelSize * this.app.handlerMatrix[x][y].offset[0]);
         this.tooltip.y(this.app.handlerMatrix[x][y].getPosition()[1] + this.app.voxelSize * this.app.handlerMatrix[x][y].offset[1]);
 
-        this.text.text("pos: " + (x + this.posOffsetX) + ", " + (y + this.posOffsetY) + " offset: " + offsetX + ", " + offsetY)
+        this.text.text("pos: " + (x + this.posOffsetX) + ", " + (this.posOffsetY - y) + " offset: " + offsetX + ", " + (-1 * offsetY))
     }
 }
