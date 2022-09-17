@@ -104,8 +104,8 @@ class App
             height: containerHeight,
             offsetX: -this.voxelSize,
             offsetY: -this.voxelSize,
-            scaleX: containerWidth / width,
-            scaleY: containerHeight / height,
+            scaleX: Math.min(containerWidth / width, containerHeight / height),
+            scaleY: Math.min(containerWidth / width, containerHeight / height),
             draggable: true
         });
 

@@ -1,8 +1,9 @@
 class ColorPicker
 {
-    constructor(pickerId, gridPickerId) {
+    constructor(pickerId, gridPickerId, bgColorId) {
         this.pickerId = pickerId;
         this.gridPicker = document.getElementById(gridPickerId);
+        this.bgPicker = document.getElementById(bgColorId);
     }
 
     initialize(app) {
@@ -15,6 +16,11 @@ class ColorPicker
 
         this.color = this.#hexToRgbA(document.getElementById(this.pickerId).value, 0.8);
         this.gridColor = this.gridPicker.value;
+
+        document.body.style.backgroundColor = this.bgPicker.value;
+        this.bgPicker.onchange = function () {
+            document.body.style.backgroundColor = self.bgPicker.value;
+        }
 
         document.getElementById(this.pickerId).onchange = function (event) {
             self.color = self.#hexToRgbA(event.target.value, 0.8);

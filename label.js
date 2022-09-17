@@ -1,5 +1,13 @@
 class Label {
+    constructor(posOffsetXId, posOffsetYId) {
+        this.posOffsetXInput = document.getElementById(posOffsetXId)
+        this.posOffsetYInput = document.getElementById(posOffsetYId)
+
+        this.posOffsetX = parseInt(this.posOffsetXInput.value);
+        this.posOffsetY = parseInt(this.posOffsetYInput.value);
+    }
     initialize(app){
+        let self = this;
         this.app = app;
         this.x = 0;
         this.y = 0;
@@ -26,6 +34,16 @@ class Label {
             })
         );
 
+        this.posOffsetXInput.onchange = function () {
+            self.posOffsetX = parseInt(self.posOffsetXInput.value);
+            self.posOffsetY = parseInt(self.posOffsetYInput.value);
+        }
+
+        this.posOffsetYInput.onchange = function () {
+            self.posOffsetX = parseInt(self.posOffsetXInput.value);
+            self.posOffsetY = parseInt(self.posOffsetYInput.value);
+        }
+
         this.text = new Konva.Text({
             text: '',
             fontFamily: 'Calibri',
@@ -44,8 +62,6 @@ class Label {
         container.focus();
 
         this.#update();
-
-        let self = this;
 
         if (!container.keyDownEventAdded) {
             container.keyDownEventAdded = true;
@@ -93,6 +109,6 @@ class Label {
         this.tooltip.x(this.app.handlerMatrix[x][y].getOriginalPosition()[0] + this.app.voxelSize * this.app.handlerMatrix[x][y].offset[0]);
         this.tooltip.y(this.app.handlerMatrix[x][y].getPosition()[1] + this.app.voxelSize * this.app.handlerMatrix[x][y].offset[1]);
 
-        this.text.text("pos: " + x + ", " + y + " offset: " + offsetX + ", " + offsetY)
+        this.text.text("pos: " + (x + this.posOffsetX) + ", " + (y + this.posOffsetY) + " offset: " + offsetX + ", " + offsetY)
     }
 }

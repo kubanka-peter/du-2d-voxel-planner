@@ -30,28 +30,39 @@
 </head>
 <body>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <div id="container" style="width: 800px; height: 800px; overflow: hidden"></div>
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <form class="container-fluid">
+            <div class="col text-start">
+                <span class="navbar-brand">DU 2D voxel planner</span>
             </div>
+            <div class="col text-end">
+                <button class="btn btn-outline-success me-2" type="button">Show config</button>
+            </div>
+        </form>
+    </nav>
+
+    <div class="container-fluid min-vh-100 d-flex flex-column" style="padding-top: 100px;">
+        <div class="row flex-grow-1">
             <div class="col">
+                <div id="container" class="h-100 w-100"></div>
+            </div>
+            <div class="col-3">
                 <div class="card">
                     <div class="card-body">
-                        <p>
-                            <span class="badge bg-info">Arrow keys: move label</span>
-                            <span class="badge bg-info">Mouse scroll: zoom</span>
-                            <span class="badge bg-info">Left click: set selected color</span>
-                            <span class="badge bg-info">Middle click: pick voxel color</span>
-                            <span class="badge bg-info">Right click: clear voxel</span>
+                        <p style="padding-top: 20px">
+                            <span class="badge bg-secondary">Arrow keys: move label</span>
+                            <span class="badge bg-secondary">Mouse scroll: zoom</span>
+                            <span class="badge bg-secondary">Left click: set selected color</span>
+                            <span class="badge bg-secondary">Left click and drag: move</span>
+                            <span class="badge bg-secondary">Middle click: pick voxel color</span>
+                            <span class="badge bg-secondary">Right click: clear voxel</span>
                         </p>
-                        <p>Coming: configs to popup, fix grid aspect ratio if width != height, custom starting pos for label</p>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col">
                                 <div class="form-group">
                                     <label class="form-label" for="width">
                                         Width
@@ -59,7 +70,7 @@
                                     <input type="number" id="width" class="form-control" value="20" style="width: 100px;">
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col">
                                 <div class="form-group">
                                     <label class="form-label" for="height">
                                         Height
@@ -68,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="small" style="padding-top: 20px;">If you change this, the current content will be deleted.<br> It's not optimized, may or may not run in your browser with large grid size.</p>
+                        <p class="small" style="padding-top: 20px;">If you change this, the current content will be deleted.<br> It's not optimized, may or may not run in your browser with large grid size (>50). User inputs aren't validated.</p>
                     </div>
                 </div>
 
@@ -97,7 +108,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-2">
+                            <div class="col">
                                 <div class="form-group">
                                     <label class="form-label" for="color">
                                         voxel color
@@ -105,12 +116,20 @@
                                     <input type="color" id="color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col">
                                 <div class="form-group">
                                     <label class="form-label" for="grid-color">
                                         grid color
                                     </label>
                                     <input type="color" id="grid-color" class="form-control" placeholder="Select a color" style="width: 60px; height: 40px">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="form-label" for="bg-color">
+                                        bg color
+                                    </label>
+                                    <input type="color" id="bg-color" class="form-control" placeholder="Select a color" value="#cccccc" style="width: 60px; height: 40px">
                                 </div>
                             </div>
                         </div>
@@ -147,6 +166,24 @@
                             </label>
                         </div>
 
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="form-label" for="label-offset-x">
+                                        Label offset X
+                                    </label>
+                                    <input type="number" id="label-offset-x" class="form-control" value="0" style="width: 100px;">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="form-label" for="label-offset-x">
+                                        Label offset Y
+                                    </label>
+                                    <input type="number" id="label-offset-y" class="form-control" value="0" style="width: 100px;">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -163,7 +200,8 @@
 
         let colorPicker = new ColorPicker(
             "color",
-            "grid-color"
+            "grid-color",
+            "bg-color"
         );
 
         let saveAndLoad = new SaveAndLoad("save", "loadFile", "load");
@@ -172,7 +210,10 @@
 
         let sizeController = new SizeController("width", "height");
 
-        let label = new Label();
+        let label = new Label(
+            "label-offset-x",
+            "label-offset-y"
+        );
 
         let app = new App(
             bgImage,
