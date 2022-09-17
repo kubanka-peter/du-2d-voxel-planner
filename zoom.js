@@ -22,7 +22,7 @@ class Zoom
             };
 
             // how to scale? Zoom in? Or zoom out?
-            let direction = e.evt.deltaY > 0 ? 1 : -1;
+            let direction = e.evt.deltaY > 0 ? -1 : 1;
 
             // when we zoom on trackpad, e.evt.ctrlKey is true
             // in that case lets revert direction
